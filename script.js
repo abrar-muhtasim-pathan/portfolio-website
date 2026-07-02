@@ -1,3 +1,35 @@
+// Contact form: build a mailto so it works with no backend
+(function () {
+  var btn = document.getElementById('cf-send');
+  if (!btn) return;
+  var note = document.getElementById('cf-note');
+
+  btn.addEventListener('click', function () {
+    var name = (document.getElementById('cf-name').value || '').trim();
+    var email = (document.getElementById('cf-email').value || '').trim();
+    var subject = (document.getElementById('cf-subject').value || '').trim();
+    var message = (document.getElementById('cf-message').value || '').trim();
+
+    if (!name || !email || !message) {
+      if (note) { note.style.color = '#e0a13a'; note.textContent = 'Please fill in your name, email, and message.'; }
+      return;
+    }
+
+    var subjectLine = subject ? subject : 'Message from portfolio site';
+    var body =
+      'Name: ' + name + '\n' +
+      'Email: ' + email + '\n\n' +
+      message;
+
+    var href = 'mailto:abrar.muhtasim.pathan@gmail.com' +
+      '?subject=' + encodeURIComponent(subjectLine) +
+      '&body=' + encodeURIComponent(body);
+
+    window.location.href = href;
+    if (note) { note.style.color = '#3fb6a8'; note.textContent = 'Opening your email app...'; }
+  });
+})();
+
 // Year
 var yr = document.getElementById('yr');
 if (yr) yr.textContent = new Date().getFullYear();
