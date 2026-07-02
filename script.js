@@ -2,6 +2,36 @@
 var yr = document.getElementById('yr');
 if (yr) yr.textContent = new Date().getFullYear();
 
+// Animate skill bars when they scroll into view
+(function () {
+  var fills = document.querySelectorAll('.bar-track i');
+  if (!fills.length) return;
+
+  // Store target width, then reset to 0 so the transition can run
+  fills.forEach(function (el) {
+    el.dataset.target = el.style.width;
+    el.style.width = '0%';
+  });
+
+  if (!('IntersectionObserver' in window)) {
+    // Fallback: just show final widths
+    fills.forEach(function (el) { el.style.width = el.dataset.target; });
+    return;
+  }
+
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        var el = e.target;
+        el.style.width = el.dataset.target;
+        obs.unobserve(el);
+      }
+    });
+  }, { threshold: 0.25 });
+
+  fills.forEach(function (el) { obs.observe(el); });
+})();
+
 // Mobile nav
 var toggle = document.getElementById('navToggle');
 var nav = document.getElementById('nav');
