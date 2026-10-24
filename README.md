@@ -1,5 +1,5 @@
 # Abrar Muhtasim Pathan — Portfolio
-Hidai
+
 A static portfolio website for an Urban Planning, GIS, and Remote Sensing researcher. Pure HTML, CSS, and JavaScript, so it deploys anywhere with no build step.
 
 ## Add the profile photo (do this first)
@@ -49,3 +49,13 @@ images/                 Profile + project maps
 - Text, links, and section content live in the HTML files.
 - Contact email, LinkedIn, Scholar, ORCID, and GitHub links sit in `index.html` (hero and contact sections).
 - To add or swap project images, drop files into the matching `images/projects/pX/` folder and update the gallery list in that project's HTML page.
+
+## Chatbot
+
+A floating "Ask about Abrar" assistant is included (`chatbot.js`, `chatbot.css`, `api/chat.js`).
+
+1. Create an API key at ollama.com/settings/keys.
+2. In Vercel: Project -> Settings -> Environment Variables -> add `OLLAMA_API_KEY`, then redeploy. Optionally add `OLLAMA_MODEL` (default `gemma4:31b`).
+3. Edit what it knows in the `SYSTEM` text inside `api/chat.js`.
+
+It only works on the deployed site, not when opening index.html from disk. Check your Ollama Cloud usage limits.
