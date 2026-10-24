@@ -52,10 +52,12 @@ images/                 Profile + project maps
 
 ## Chatbot
 
-A floating "Ask about Abrar" assistant is included (`chatbot.js`, `chatbot.css`, `api/chat.js`).
+A floating "Ask about Abrar" assistant (`chatbot.js`, `chatbot.css`, `api/chat.js`) powered by Ollama Cloud.
 
-1. Create an API key at ollama.com/settings/keys.
-2. In Vercel: Project -> Settings -> Environment Variables -> add `OLLAMA_API_KEY`, then redeploy. Optionally add `OLLAMA_MODEL` (default `gemma4:31b`).
-3. Edit what it knows in the `SYSTEM` text inside `api/chat.js`.
+**What it knows:** the CV (`assets/Abrar_Muhtasim_Pathan_CV.pdf`) and `assets/Extra_Info.docx`, both read automatically on the server.
 
-It only works on the deployed site, not when opening index.html from disk. Check your Ollama Cloud usage limits.
+**To teach it something new:** open `assets/Extra_Info.docx`, type the information, save, then `git add . && git commit -m "Update extra info" && git push`. Vercel redeploys and the bot knows it. If you update the CV PDF, push it the same way. Do not type private information there; visitors can ask the bot anything it knows.
+
+**Setup:** in Vercel -> Project -> Settings -> Environment Variables add `OLLAMA_API_KEY` (from ollama.com/settings/keys), then redeploy. Optional: `OLLAMA_MODEL` (default `gemma4:31b`).
+
+It only works on the deployed site (or `vercel dev`), not when opening index.html from disk.
