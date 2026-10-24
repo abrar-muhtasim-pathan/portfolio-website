@@ -61,3 +61,5 @@ A floating "Ask about Abrar" assistant (`chatbot.js`, `chatbot.css`, `api/chat.j
 **Setup:** in Vercel -> Project -> Settings -> Environment Variables add `OLLAMA_API_KEY` (from ollama.com/settings/keys), then redeploy. Optional: `OLLAMA_MODEL` (default `gemma4:31b`).
 
 It only works on the deployed site (or `vercel dev`), not when opening index.html from disk.
+
+**Check what the bot can read:** open `https://YOUR-SITE.vercel.app/api/chat?debug=1`. It shows whether the CV and Extra_Info were read and how many characters each has (for example `"extra":"ok via disk, 75 chars"`). The bot picks up changes within about 2 minutes of a new deploy.

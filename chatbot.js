@@ -58,20 +58,46 @@
     input.value = '';
     var wait = add('bot', '...');
 
+    var fallback = 'Sorry, something went wrong. Please try again or use the contact section.';
+    var full = '';
+
     fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: history })
     })
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        var reply = d.reply || 'Sorry, something went wrong. Please try again or use the contact section.';
-        wait.textContent = reply;
-        history.push({ role: 'assistant', content: reply });
+      .then(function (r) {
+        if (!r.ok) throw new Error('bad status');
+        if (!r.body || !r.body.getReader) {
+          return r.text().then(function (t) { full = t; wait.textContent = t; });
+        }
+        var reader = r.body.getReader();
+        var dec = new TextDecoder();
+        function pump() {
+          return reader.read().then(function (res) {
+            if (res.done) return;
+            full += dec.decode(res.value, { stream: true });
+            wait.textContent = full;
+            log.scrollTop = log.scrollHeight;
+            return pump();
+          });
+        }
+        return pump();
+      })
+      .then(function () {
+        full = full.trim();
+        if (!full) { wait.textContent = fallback; history.pop(); return; }
+        wait.textContent = full;
+        history.push({ role: 'assistant', content: full });
       })
       .catch(function () {
-        wait.textContent = 'Connection problem. Please try again.';
-        history.pop();
+        if (full.trim()) {
+          // connection dropped mid-answer: keep what arrived
+          history.push({ role: 'assistant', content: full.trim() });
+        } else {
+          wait.textContent = 'Connection problem. Please try again.';
+          history.pop();
+        }
       })
       .finally(function () { busy = false; sendBtn.disabled = false; log.scrollTop = log.scrollHeight; });
   }
